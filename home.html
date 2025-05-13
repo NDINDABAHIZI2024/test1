@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ISOMERO</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+    }
+
+    /* Navbar (Header) */
+    .navbar {
+      background: #4CAF50;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Hero section */
+    .hero {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+    }
+
+    /* Search box */
+    .search-box {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .search-box input {
+      padding: 10px;
+      width: 50%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    /* Book List */
+    .book-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .book-card {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+
+    /* Footer */
+    .footer {
+      background: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (Header) -->
+  <div class="navbar">
+    <div><strong>ISOMERO</strong></div>
+    <div>
+      <a href="welcome.html">Publish</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+
+  <!-- Welcome section -->
+  <div class="hero">
+    <h2>WELCOME TO ISOMERO</h2>
+    <p>Discover, read, and publish books freely.</p>
+  </div>
+
+  <!-- Search bar -->
+  <div class="search-box">
+    <input type="text" placeholder="Search books...">
+  </div>
+
+  <!-- Book catalog -->
+  <div class="book-list" id="bookList">
+    <!-- Books will be dynamically added here -->
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Powered by Claude NDINDABAHIZI
+  </div>
+
+  <script>
+    // Redirect if not logged in
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "login.html";
+    }
+
+    // Function to display published books
+    function displayBooks() {
+      const books = JSON.parse(localStorage.getItem("publishedBooks")) || [];
+      const bookListDiv = document.getElementById("bookList");
+
+      // Check if no books are published
+      if (books.length === 0) {
+        bookListDiv.innerHTML = "<p>No books published yet.</p>";
+        return;
+      }
+
+      // Loop through each book and display it
+      books.forEach(book => {
+        const bookCard = document.createElement("div");
+        bookCard.classList.add("book-card");
+
+        bookCard.innerHTML = `
+          <h3>${book.title}</h3>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p><strong>Description:</strong> ${book.description}</p>
+          <a href="${book.fileUrl}" download="${book.fileName}" class="download-btn">Download</a>
+        `;
+
+        bookListDiv.appendChild(bookCard);
+      });
+    }
+
+    // Call the function to display books when the page loads
+    window.onload = displayBooks;
+  </script>
+
+</body>
+</html>

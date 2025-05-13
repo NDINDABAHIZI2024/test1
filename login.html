@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ISOMERO Login</title>
+  <style>
+    body {
+      background-color: #f5f7fa;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login to ISOMERO</h2>
+    <form onsubmit="return login()">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <div id="error" class="error"></div>
+    </form>
+  </div>
+
+  <script>
+    // Hardcoded credentials
+    const user = "admin";
+    const pass = "12345";
+
+    // Login function
+    function login() {
+      const enteredUser = document.getElementById("username").value;
+      const enteredPass = document.getElementById("password").value;
+
+      if (enteredUser === user && enteredPass === pass) {
+        // Save login state
+        localStorage.setItem("isLoggedIn", "true");
+        // Redirect to welcome
+        window.location.href = "welcome.html";
+      } else {
+        document.getElementById("error").textContent = "Invalid credentials.";
+      }
+
+      return false; // Prevent form submission
+    }
+  </script>
+</body>
+</html>

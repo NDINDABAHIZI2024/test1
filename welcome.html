@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to ISOMERO</title>
+  <style>
+    body {
+      background: #f0f8ff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    input, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #message {
+      text-align: center;
+      color: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Welcome to ISOMERO - Publish Your Book</h2>
+
+  <!-- Book submission form -->
+  <form onsubmit="return publishBook()">
+    <input type="text" id="bookTitle" placeholder="Book Title" required />
+    <input type="text" id="authorName" placeholder="Author Name" required />
+    <textarea id="description" placeholder="Book Description" rows="4" required></textarea>
+
+    <!-- File upload input -->
+    <input type="file" id="bookFile" accept=".pdf,.epub,.txt" required />
+
+    <button type="submit">Publish Book</button>
+    <div id="message"></div>
+  </form>
+
+  <script>
+    // Redirect if not logged in
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    // Publish book function
+    function publishBook() {
+      const title = document.getElementById("bookTitle").value;
+      const author = document.getElementById("authorName").value;
+      const desc = document.getElementById("description").value;
+      const fileInput = document.getElementById("bookFile");
+      const file = fileInput.files[0]; // Get the selected file
+
+      // Check if a file is selected
+      if (!file) {
+        alert("Please select a book file to upload.");
+        return false;
+      }
+
+      // Get existing books from localStorage or initialize as an empty array
+      let books = JSON.parse(localStorage.getItem("publishedBooks")) || [];
+
+      // Create a file URL (this would be a placeholder URL in this example)
+      const fileUrl = URL.createObjectURL(file); // This creates a temporary URL for the file
+
+      // Add the new book to the array
+      books.push({
+        title: title,
+        author: author,
+        description: desc,
+        fileUrl: fileUrl, // Store the file URL
+        fileName: file.name, // Store the file name
+      });
+
+      // Save the updated books list back to localStorage
+      localStorage.setItem("publishedBooks", JSON.stringify(books));
+
+      // Display success message
+      document.getElementById("message").textContent =
+        `✅ "${title}" by ${author} published successfully!`;
+
+      // Go to home after 2 seconds
+      setTimeout(() => {
+        window.location.href = "home.html";
+      }, 2000);
+
+      return false;
+    }
+  </script>
+
+</body>
+</html>
